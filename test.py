@@ -1,0 +1,64 @@
+#!/usr/bin/python3
+
+import time
+import subprocess
+import board
+import neopixel
+import os
+
+from ids import IDS
+
+try:
+    with open('/home/pi/test1', 'w') as f:
+        pass
+        print ("disk is writable")
+except IOError as x:
+    print ('disk is not writable:' +  x.strerror)
+
+date = time.strftime("%Y-%m-%d", time.localtime())
+d_time = time.strftime("_%H_%M_%S", time.localtime())
+
+ids = IDS()
+devID=ids.devID
+
+sesID=ids.sesID
+
+os.system("raspivid --framerate 24 -t 600000 & ")
+
+TestID = input("please scan a command RFID\n")[-8:]
+
+while TestID[-2:] != "ef" and TestID[-2:] != "62" and TestID[-2:] != "5d": 
+   print("ID is not correct, please scan the right ID")
+   TestID = input("please scan a command RFID\n")[-8:]
+
+      
+os.system("killall raspivid")
+
+if TestID[-2:] == "ef": #0087b4ef
+   color="BI"
+  # a,b,c,d = 30,12,55,0
+   a,b,c,d,e,f = 15,11,0,0,0,18
+if TestID[-2:] == "62": #0084cb62
+   color="BL"
+   a,b,c,d,e,f= 0,0,18,0,0,18
+if TestID[-2:] == "5d": #002d2e5d
+   color = "YL"
+   a,b,c,d,e,f = 15,11,0,15,11,0
+
+pixels = neopixel.NeoPixel(board.D18, 128)
+for i in range(64):
+	pixels[i] = (a, b, c)
+for i in range(64,128):
+        pixels[i] = (d, e, f)
+
+file_name= "/home/pi/video/CPP_" + date + d_time + "_BOX_" + devID + "_S" + str(sesID) + "_" + color + ".h264"
+print(file_name)
+msec=15*60*1000
+os.system("raspivid --framerate 30 -hf -br 50 -t "+ str(msec) + " -o " + file_name)
+
+for i in range(len(pixels)):
+	pixels[i] = (0, 0, 0)
+
+ids.sessionIncrement()
+time.sleep(1)
+#subprocess.call(['./convert_video.sh', str(file_name)])
