@@ -38,43 +38,51 @@ devID=ids.devID
 sesID=ids.sesID
 
 # collect info on color preference of the test subject
-PrefID=input("Please scan the color preference of the fish, use yellow/blue if unknown\n")[-2:]
+PrefID=input("Please scan the pattern/color preference of the fish, use yellow/blue if unknown\n")[-2:]
 while PrefID != "ef" and PrefID != "62" and PrefID != "5d":
    print (PrefID)
-   print("RFID is not correct, please scan either yellow,  blue, or  yellow/blue for unknown preference\n")
-   PrefID = input("Please scan the color preference of the fish\n")[-2:]
+   print("RFID is not correct, please scan either grid/yellow,  circle/blue, or  yellow/blue for unknown preference\n")
+   PrefID = input("Please scan the pattern/color preference of the fish\n")[-2:]
 
 if PrefID[-2:] == "ef": #0087b4ef
    Pref="Unknown"
 if PrefID[-2:] == "62": #0084cb62
-   Pref="Blue"
+   #Pref="Blue"
+   Pref="Circle"
 if PrefID[-2:] == "5d": #002d2e5d
-   Pref = "Yellow"
+   #Pref = "Yellow"
+   Pref="Grid"
 
 # start camera 
 os.system("raspivid --framerate 24 -t 600000 & ")
 
 # which light to turn on?
-TestID = input("please scan an RFID for the color of the LEDs\n")[-2:]
+TestID = input("please scan an RFID for the pattern/color of the LEDs\n")[-2:]
 while TestID != "ef" and TestID != "62" and TestID != "5d": 
    print (TestID)
    print("RFID is not correct, please rescan")
-   TestID = input("please scan an RFID for the color of the LEDs\n")[-2:]
+   TestID = input("please scan an RFID for the pattern/color of the LEDs\n")[-2:]
 
 os.system("killall raspivid")
 
 if TestID[-2:] == "ef": #0087b4ef
    color="BI"
-   a,b,c,d,e,f = 15,11,0,0,0,18
+   #a,b,c,d,e,f = 15,11,0,0,0,18
+   a,b,c,d,e,f = 15,15,15,15,15,15
+	
 if TestID[-2:] == "62": #0084cb62
-   color="BL"
-   a,b,c,d,e,f= 0,0,18,0,0,18
+   #color="BL"
+   color="Circle"
+   #a,b,c,d,e,f= 0,0,18,0,0,18
+   a,b,c,d,e,f = 15,15,15,15,15,15
 if TestID[-2:] == "5d": #002d2e5d
-   color = "YL"
-   a,b,c,d,e,f = 15,11,0,15,11,0
+   #color = "YL"
+   color="Grid"
+   #a,b,c,d,e,f = 15,11,0,15,11,0
+   a,b,c,d,e,f = 15,15,15,15,15,15
 
 if Pref == "Unknown" and color !="BI":
-   sys.exit("Fish with unknown color preference must be tested with both colors, please restart")
+   sys.exit("Fish with unknown pattern/color preference must be tested with both patterns/colors, please restart")
 
 pixels = neopixel.NeoPixel(board.D18, 128)
 for i in range(64):
