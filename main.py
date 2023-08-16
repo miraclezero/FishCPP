@@ -92,7 +92,8 @@ for i in range(64,128):
 
 file_name= "/home/pi/video/CPP_" + date + d_time + "-"+ devID + "-S" + str(sesID) + "-prefer-" + Pref +"-floor-" + color + ".h264"
 print(file_name)
-msec=15*60*1000
+#msec=15*60*1000
+msec=30*60*1000
 os.system("raspivid --framerate 30 -hf -br 50 -pts " + file_name +".time.txt" + " -t "+ str(msec) + " -o " + file_name)
 print("raspivid --framerate 30 -hf -br 50 -pts " + file_name +".time.txt" + " -t "+ str(msec) + " -o " + file_name)
 
