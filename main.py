@@ -90,7 +90,7 @@ for i in range(64):
 for i in range(64,128):
     pixels[i] = (d, e, f)
 
-file_name= "/home/pi/video/CPP_" + date + d_time + "-"+ devID + "-S" + str(sesID) + "-prefer-" + Pref +"-floor-" + color + ".h264"
+file_name= "/home/pi/video/CPP_" + devID + "-S" + str(sesID) + "-" + date + d_time + "-prefer-" + Pref +"-floor-" + color + ".h264"
 print(file_name)
 #msec=15*60*1000
 msec=20*60*1000
