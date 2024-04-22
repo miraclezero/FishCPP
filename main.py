@@ -39,7 +39,7 @@ sesID=ids.sesID
 
 pixels = neopixel.NeoPixel(board.D18, 128)
 for i in range(128):
-   pixels[i] = (10, 10, 10)
+   pixels[i] = (15, 15, 15)
 
 # collect info on color preference of the test subject
 PrefID=input("Please scan the pattern/color preference of the fish, use yellow/blue if unknown\n")[-2:]
